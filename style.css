@@ -1,0 +1,181 @@
+header {
+    background-color: #228B22;
+    color: white;
+    padding: 20px;
+}
+
+h1, h2 {
+    margin-top: 0;
+}
+
+/* Style du menu */
+nav ul {
+    list-style: none;
+    background-color: #2c3e50;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Style pour les sections */
+section {
+    margin: 40px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+/* Style pour les blocs d'habitats */
+.habitat {
+    display: inline-block;
+    width: 45%;
+    margin: 10px;
+    text-align: center;
+}
+
+.habitat img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.habitat img {
+    max-width: 100%;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.habitat img:hover {
+    transform: scale(1.05);
+}
+
+/* Style pour la section des services */
+#services ul {
+    list-style: none;
+    padding: 0;
+}
+
+#services ul li {
+    background-color: #e7f3e4;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+
+#services ul li {
+    background-color: #e7f3e4;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+#services ul li:hover {
+    background-color: #c6e1c3;
+}
+/* Style pour la section connexion */
+#connexion {
+    margin: 40px auto;
+    padding: 20px;
+    width: 300px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#connexion label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#connexion input[type="email"],
+#connexion input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#connexion input[type="submit"] {
+    background-color: #228B22;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#connexion input[type="submit"]:hover {
+    background-color: #1abc9c;
+}
+/* Style pour la section contact */
+#contact {
+    margin: 40px auto;
+    padding: 20px;
+    width: 400px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#contact label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#contact input[type="text"],
+#contact input[type="email"],
+#contact textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#contact input[type="submit"] {
+    background-color: #228B22;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#contact input[type="submit"]:hover {
+    background-color: #1abc9c;
+}
+
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    display: block;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+nav ul li a:hover {
+    background-color: #1abc9c;
+    border-radius: 5px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+footer {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 0.9em;
+    color: #666;
+}

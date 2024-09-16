@@ -149,6 +149,80 @@ section {
     background-color: #1abc9c;
 }
 
+/* Style pour la section avis */
+#avis {
+    margin: 40px auto;
+    padding: 20px;
+    width: 400px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#avis label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+#avis input[type="text"],
+#avis textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#avis input[type="submit"] {
+    background-color: #228B22;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#avis input[type="submit"]:hover {
+    background-color: #1abc9c;
+}
+
+#affichage-avis {
+    margin: 40px 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+
+.avis {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #e7f3e4;
+    border-radius: 5px;
+}
+
+
+/* Amélioration de l'expérience utilisateur sur les champs de complétion */
+input:focus {
+    border-color: #1abc9c;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 128, 0, 0.5);
+}
+
+input:invalid {
+    border-color: red;
+}
+
+/* Animation au survol sur les boutons/images */
+input[type="submit"] {
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: #1abc9c;
+    transform: scale(1.05);
+}
+
 
 nav ul li {
     display: inline;

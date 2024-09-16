@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact - Zoo Arcadia</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 <body>
 
@@ -15,24 +17,25 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="habitats.html">Nos Habitats</a></li>
-            <li><a href="services.html">Nos Services</a></li>
-            <li><a href="connexion.html">Connexion</a></li>
-            <li><a href="contact.html">Contact</a></li>
+            <li><a href="index.php">Accueil</a></li>
+            <li><a href="habitats.php">Nos Habitats</a></li>
+            <li><a href="services.php">Nos Services</a></li>
+            <li><a href="connexion.php">Connexion</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
+    
 
     <section id="contact">
         <h2>Formulaire de contact</h2>
         <form action="process_contact.php" method="POST">
-            <label for="titre">Titre :</label>
+            <label for="titre"><i class="fas fa-heading"></i> Titre :</label>
             <input type="text" id="titre" name="titre" required><br><br>
             
-            <label for="description">Description :</label>
+            <label for="description"><i class="fas fa-align-left"></i> Description :</label>
             <textarea id="description" name="description" rows="4" required></textarea><br><br>
             
-            <label for="email">Adresse e-mail :</label>
+            <label for="email"><i class="fas fa-envelope"></i> Adresse e-mail :</label>
             <input type="email" id="email" name="email" required><br><br>
             
             <input type="submit" value="Envoyer">

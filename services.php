@@ -15,11 +15,11 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="habitats.html">Nos Habitats</a></li>
-            <li><a href="services.html">Nos Services</a></li>
-            <li><a href="#">Connexion</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="index.php">Accueil</a></li>
+            <li><a href="habitats.php">Nos Habitats</a></li>
+            <li><a href="services.php">Nos Services</a></li>
+            <li><a href="connexion.php">Connexion</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
     

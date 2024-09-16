@@ -1,3 +1,11 @@
+<?php
+// Connexion à la base de données
+include 'connexion_bdd.php';
+
+// Récupérer les avis validés depuis la base de données
+$avis = $pdo->query("SELECT pseudo, commentaire FROM avis WHERE valide = TRUE")->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,14 +23,13 @@
 
     <nav>
         <ul>
-            <li><a href="index.html">Accueil</a></li>
-            <li><a href="habitats.html">Nos Habitats</a></li>
-            <li><a href="services.html">Nos Services</a></li>
-            <li><a href="#">Connexion</a></li>
-            <li><a href="#">Contact</a></li>
+            <li><a href="index.php">Accueil</a></li>
+            <li><a href="habitats.php">Nos Habitats</a></li>
+            <li><a href="services.php">Nos Services</a></li>
+            <li><a href="connexion.php">Connexion</a></li>
+            <li><a href="contact.php">Contact</a></li>
         </ul>
     </nav>
-    
 
     <section id="habitats">
         <h2>Nos Habitats</h2>
@@ -38,6 +45,16 @@
         </div>
     </section>
 
+    <section id="affichage-avis">
+        <h2>Avis des visiteurs</h2>
+        <!-- Affichage dynamique des avis validés depuis la base de données -->
+        <?php foreach ($avis as $a): ?>
+            <div class="avis">
+                <p><strong><?= htmlspecialchars($a['pseudo']); ?> :</strong> <?= htmlspecialchars($a['commentaire']); ?></p>
+            </div>
+        <?php endforeach; ?>
+    </section>
+
     <section id="services">
         <h2>Nos Services</h2>
         <ul>
@@ -50,6 +67,6 @@
     <footer>
         <p>&copy; 2024 Zoo Arcadia - Tous droits réservés</p>
     </footer>
-    
+
 </body>
 </html>

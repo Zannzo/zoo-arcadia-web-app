@@ -7,8 +7,23 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'employe') {
 
 include 'connexion_bdd.php';
 
-// Récupérer les avis non validés
-$avis = $pdo->query("SELECT * FROM avis WHERE valide = FALSE")->fetchAll(PDO::FETCH_ASSOC);
+// Récupérer la liste des animaux
+$animaux = $pdo->query("SELECT * FROM animaux")->fetchAll(PDO::FETCH_ASSOC);
+
+// Initialiser la variable $animal_id pour éviter l'erreur
+$animal_id = null;
+
+// Vérifier si un animal est sélectionné
+if (isset($_GET['animal_id'])) {
+    $animal_id = $_GET['animal_id'];
+
+    // Récupérer les consommations passées pour l'animal sélectionné
+    $stmt = $pdo->prepare("SELECT * FROM consommations_nourriture WHERE animal_id = :animal_id ORDER BY date_consommation DESC");
+    $stmt->execute(['animal_id' => $animal_id]);
+    $consommations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} else {
+    $consommations = [];
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,30 +31,56 @@ $avis = $pdo->query("SELECT * FROM avis WHERE valide = FALSE")->fetchAll(PDO::FE
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espace Employé - Validation des avis</title>
+    <title>Gestion de la nourriture des animaux</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Bienvenue dans l'espace Employé</h1>
-    <h2>Validation des avis</h2>
 
-    <table>
+<!-- Formulaire pour ajouter une nouvelle consommation -->
+<h1>Ajouter une consommation de nourriture</h1>
+
+<form action="ajouter_consommation.php" method="POST">
+    <label for="animal">Sélectionner l'animal :</label>
+    <select id="animal" name="animal_id" required>
+        <?php foreach ($animaux as $animal): ?>
+            <option value="<?= $animal['id']; ?>" <?= isset($animal_id) && $animal_id == $animal['id'] ? 'selected' : ''; ?>>
+                <?= htmlspecialchars($animal['nom']); ?>
+            </option>
+        <?php endforeach; ?>
+    </select><br><br>
+
+    <label for="nourriture">Type de nourriture :</label>
+    <input type="text" id="nourriture" name="nourriture" required><br><br>
+
+    <label for="grammage">Quantité (en grammes) :</label>
+    <input type="number" id="grammage" name="grammage" required><br><br>
+
+    <label for="date">Date et heure :</label>
+    <input type="datetime-local" id="date" name="date_consommation" required><br><br>
+
+    <input type="submit" value="Ajouter la consommation">
+</form>
+
+<!-- Affichage des consommations passées -->
+<h2>Consommations passées</h2>
+<table>
+    <tr>
+        <th>Date</th>
+        <th>Nourriture</th>
+        <th>Quantité</th>
+    </tr>
+    <?php if (!empty($consommations)): ?>
+        <?php foreach ($consommations as $consommation): ?>
         <tr>
-            <th>Pseudo</th>
-            <th>Avis</th>
-            <th>Action</th>
-        </tr>
-        <?php foreach ($avis as $a): ?>
-        <tr>
-            <td><?= htmlspecialchars($a['pseudo']); ?></td>
-            <td><?= htmlspecialchars($a['commentaire']); ?></td>
-            <td>
-                <!-- Boutons Valider et Rejeter -->
-                <a href="valider_avis.php?id=<?= $a['id']; ?>">Valider</a>
-                <a href="rejeter_avis.php?id=<?= $a['id']; ?>">Rejeter</a>
-            </td>
+            <td><?= htmlspecialchars($consommation['date_consommation']); ?></td>
+            <td><?= htmlspecialchars($consommation['nourriture']); ?></td>
+            <td><?= htmlspecialchars($consommation['grammage']); ?>g</td>
         </tr>
         <?php endforeach; ?>
-    </table>
+    <?php else: ?>
+        <tr><td colspan="3">Aucune consommation enregistrée pour cet animal.</td></tr>
+    <?php endif; ?>
+</table>
+
 </body>
 </html>

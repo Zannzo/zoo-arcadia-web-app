@@ -10,25 +10,24 @@ include 'connexion_bdd.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $animal_id = $_POST['animal_id'];
     $etat = $_POST['etat'];
-    $nourriture_proposee = $_POST['nourriture_proposee'];
-    $grammage_nourriture = $_POST['grammage_nourriture'];
+    $nourriture = $_POST['nourriture_proposee'];
+    $grammage = $_POST['grammage_nourriture'];
     $date_passage = $_POST['date_passage'];
-    $detail_etat = $_POST['detail_etat'] ?? null;
+    $detail_etat = $_POST['detail_etat'] ?? ''; // Optionnel
 
-    // Insérer le compte rendu dans la base de données
-    $stmt = $pdo->prepare("INSERT INTO comptes_rendus (animal_id, etat, nourriture_proposee, grammage_nourriture, date_passage, detail_etat) 
-                           VALUES (:animal_id, :etat, :nourriture_proposee, :grammage_nourriture, :date_passage, :detail_etat)");
-    $stmt->execute([
-        'animal_id' => $animal_id,
-        'etat' => $etat,
-        'nourriture_proposee' => $nourriture_proposee,
-        'grammage_nourriture' => $grammage_nourriture,
-        'date_passage' => $date_passage,
-        'detail_etat' => $detail_etat
-    ]);
+    if (!empty($animal_id) && !empty($etat) && !empty($nourriture) && !empty($grammage) && !empty($date_passage)) {
+        $stmt = $pdo->prepare("INSERT INTO rapport_veterinaire (animal_id, date, detail) 
+            VALUES (:animal_id, :date_passage, :etat)");
+        $stmt->execute([
+            'animal_id' => $animal_id,
+            'date_passage' => $date_passage,
+            'etat' => $etat
+        ]);
 
-    // Redirection après ajout
-    header('Location: veterinaire.php?animal_id=' . $animal_id);
-    exit();
+        header('Location: veterinaire.php'); // Redirection après ajout
+        exit();
+    } else {
+        echo "Tous les champs sont requis.";
+    }
 }
 ?>

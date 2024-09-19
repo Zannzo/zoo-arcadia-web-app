@@ -7,16 +7,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 include 'connexion_bdd.php';
 
-// Vérifier si l'ID de l'habitat est passé en paramètre
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $habitat_id = $_GET['id'];
 
-    // Supprimer l'habitat de la base de données
-    $stmt = $pdo->prepare("DELETE FROM habitats WHERE id = :id");
-    $stmt->execute(['id' => $id]);
+    // Suppression sécurisée avec une requête préparée
+    $stmt = $pdo->prepare("DELETE FROM habitat WHERE habitat_id = :habitat_id");
+    $stmt->execute(['habitat_id' => $habitat_id]);
 
-    // Redirection après suppression
-    header('Location: admin.php');
+    header('Location: admin.php'); // Redirection après suppression
     exit();
+} else {
+    echo "Habitat non trouvé.";
 }
 ?>

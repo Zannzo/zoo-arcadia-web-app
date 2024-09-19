@@ -1,10 +1,20 @@
 <?php
-// Connexion à la base de données
+session_start();
 include 'connexion_bdd.php';
 
-// Récupérer les avis validés depuis la base de données
-$avis = $pdo->query("SELECT pseudo, commentaire FROM avis WHERE valide = TRUE")->fetchAll(PDO::FETCH_ASSOC);
+// Récupérer les avis validés (invisible = 0 signifie que l'avis est validé)
+$requeteAvis = $pdo->query("SELECT * FROM avis WHERE invisible = 0");
+$avis = $requeteAvis->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les habitats
+$requeteHabitats = $pdo->query("SELECT * FROM habitat");
+$habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les services
+$requeteServices = $pdo->query("SELECT * FROM service");
+$services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">

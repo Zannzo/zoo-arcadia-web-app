@@ -1,47 +1,46 @@
+<?php
+session_start();
+include 'connexion_bdd.php';
+
+// Récupérer les habitats depuis la base de données
+$requeteHabitats = $pdo->query("SELECT * FROM habitat");
+$habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Habitats - Zoo Arcadia</title>
+    <title>Nos Habitats</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
         <h1>Nos Habitats</h1>
-        <p>Explorez les habitats et les animaux du zoo Arcadia.</p>
+        <nav>
+            <ul>
+                <li><a href="index.php">Accueil</a></li>
+                <li><a href="habitats.php">Nos Habitats</a></li>
+                <li><a href="services.php">Nos Services</a></li>
+                <li><a href="connexion.php">Connexion</a></li>
+                <li><a href="contact.php">Contactez-nous</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="habitats.php">Nos Habitats</a></li>
-            <li><a href="services.php">Nos Services</a></li>
-            <li><a href="connexion.php">Connexion</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-    </nav>
-    
-    
-
     <section id="habitats">
-        <h2>Liste des habitats</h2>
-        <div class="habitat">
-            <h3>Savane</h3>
-            <img src="https://via.placeholder.com/150" alt="Savane">
-            <p>La savane accueille les éléphants, lions et plus encore.</p>
-        </div>
-        <div class="habitat">
-            <h3>Jungle</h3>
-            <img src="https://via.placeholder.com/150" alt="Jungle">
-            <p>Explorez la jungle et découvrez nos singes, perroquets et autres espèces exotiques.</p>
-        </div>
+        <h2>Découvrez nos habitats</h2>
+        <?php foreach ($habitats as $habitat): ?>
+            <div class="habitat">
+                <h3><?= htmlspecialchars($habitat['nom']); ?></h3>
+                <p><?= htmlspecialchars($habitat['description']); ?></p>
+            </div>
+        <?php endforeach; ?>
     </section>
 
     <footer>
         <p>&copy; 2024 Zoo Arcadia - Tous droits réservés</p>
     </footer>
-
 </body>
 </html>

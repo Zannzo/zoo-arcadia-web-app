@@ -7,22 +7,17 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'employe') {
 
 include 'connexion_bdd.php';
 
-// Récupérer la liste des animaux
-$animaux = $pdo->query("SELECT * FROM animaux")->fetchAll(PDO::FETCH_ASSOC);
+// Récupérer les animaux
+$requeteAnimaux = $pdo->query("SELECT * FROM animal");
+$animaux = $requeteAnimaux->fetchAll(PDO::FETCH_ASSOC);
 
-// Initialiser la variable $animal_id pour éviter l'erreur
-$animal_id = null;
-
-// Vérifier si un animal est sélectionné
+// Récupérer les consommations pour un animal donné
+$consommations = [];
 if (isset($_GET['animal_id'])) {
     $animal_id = $_GET['animal_id'];
-
-    // Récupérer les consommations passées pour l'animal sélectionné
-    $stmt = $pdo->prepare("SELECT * FROM consommations_nourriture WHERE animal_id = :animal_id ORDER BY date_consommation DESC");
+    $stmt = $pdo->prepare("SELECT * FROM consommations_nourriture WHERE animal_id = :animal_id ORDER BY date_consommation DESC, heure_consommation DESC");
     $stmt->execute(['animal_id' => $animal_id]);
     $consommations = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} else {
-    $consommations = [];
 }
 ?>
 
@@ -31,56 +26,74 @@ if (isset($_GET['animal_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de la nourriture des animaux</title>
+    <title>Espace Employé</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Espace Employé</h1>
 
-<!-- Formulaire pour ajouter une nouvelle consommation -->
-<h1>Ajouter une consommation de nourriture</h1>
+    <!-- Formulaire de sélection d'animal -->
+    <form method="GET" action="employe.php">
+        <label for="animal">Choisir un animal :</label>
+        <select name="animal_id" id="animal" required>
+            <option value="">Sélectionner un animal</option>
+            <?php foreach ($animaux as $animal): ?>
+                <option value="<?= $animal['animal_id']; ?>" <?= isset($animal_id) && $animal_id == $animal['animal_id'] ? 'selected' : ''; ?>>
+                    <?= htmlspecialchars($animal['prenom']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <input type="submit" value="Voir les consommations">
+    </form>
 
-<form action="ajouter_consommation.php" method="POST">
-    <label for="animal">Sélectionner l'animal :</label>
-    <select id="animal" name="animal_id" required>
-        <?php foreach ($animaux as $animal): ?>
-            <option value="<?= $animal['id']; ?>" <?= isset($animal_id) && $animal_id == $animal['id'] ? 'selected' : ''; ?>>
-                <?= htmlspecialchars($animal['nom']); ?>
-            </option>
-        <?php endforeach; ?>
-    </select><br><br>
+    <h2>Consommations de nourriture</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Heure</th>
+                <th>Nourriture</th>
+                <th>Quantité (grammes)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($consommations)): ?>
+                <?php foreach ($consommations as $consommation): ?>
+                <tr>
+                    <td><?= htmlspecialchars($consommation['date_consommation']); ?></td>
+                    <td><?= htmlspecialchars($consommation['heure_consommation']); ?></td>
+                    <td><?= htmlspecialchars($consommation['nourriture']); ?></td>
+                    <td><?= htmlspecialchars($consommation['quantite']); ?>g</td>
+                </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr><td colspan="4">Aucune consommation disponible pour cet animal.</td></tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
-    <label for="nourriture">Type de nourriture :</label>
-    <input type="text" id="nourriture" name="nourriture" required><br><br>
+    <h2>Ajouter une consommation de nourriture</h2>
+    <form action="ajouter_consommation.php" method="POST">
+        <label for="animal_id">Animal :</label>
+        <select name="animal_id" id="animal_id" required>
+            <?php foreach ($animaux as $animal): ?>
+                <option value="<?= $animal['animal_id']; ?>"><?= htmlspecialchars($animal['prenom']); ?></option>
+            <?php endforeach; ?>
+        </select><br><br>
 
-    <label for="grammage">Quantité (en grammes) :</label>
-    <input type="number" id="grammage" name="grammage" required><br><br>
+        <label for="nourriture">Nourriture donnée :</label>
+        <input type="text" name="nourriture" id="nourriture" required><br><br>
 
-    <label for="date">Date et heure :</label>
-    <input type="datetime-local" id="date" name="date_consommation" required><br><br>
+        <label for="quantite">Quantité (en grammes) :</label>
+        <input type="number" name="quantite" id="quantite" required><br><br>
 
-    <input type="submit" value="Ajouter la consommation">
-</form>
+        <label for="date_consommation">Date de consommation :</label>
+        <input type="date" name="date_consommation" id="date_consommation" required><br><br>
 
-<!-- Affichage des consommations passées -->
-<h2>Consommations passées</h2>
-<table>
-    <tr>
-        <th>Date</th>
-        <th>Nourriture</th>
-        <th>Quantité</th>
-    </tr>
-    <?php if (!empty($consommations)): ?>
-        <?php foreach ($consommations as $consommation): ?>
-        <tr>
-            <td><?= htmlspecialchars($consommation['date_consommation']); ?></td>
-            <td><?= htmlspecialchars($consommation['nourriture']); ?></td>
-            <td><?= htmlspecialchars($consommation['grammage']); ?>g</td>
-        </tr>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <tr><td colspan="3">Aucune consommation enregistrée pour cet animal.</td></tr>
-    <?php endif; ?>
-</table>
+        <label for="heure_consommation">Heure de consommation :</label>
+        <input type="time" name="heure_consommation" id="heure_consommation" required><br><br>
 
+        <button type="submit">Ajouter la consommation</button>
+    </form>
 </body>
 </html>

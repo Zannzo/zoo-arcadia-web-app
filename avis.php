@@ -1,45 +1,48 @@
+<?php
+session_start();
+if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'employe') {
+    header('Location: connexion.php');
+    exit();
+}
+
+include 'connexion_bdd.php';
+
+// Récupérer les avis invisibles (en attente de validation)
+$requeteAvis = $pdo->query("SELECT * FROM avis WHERE invisible = 1");
+$avis = $requeteAvis->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Donnez votre avis - Zoo Arcadia</title>
+    <title>Gestion des Avis</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>Gestion des Avis en attente</h1>
 
-    <header>
-        <h1>Laissez un avis</h1>
-        <p>Votre avis compte pour nous !</p>
-    </header>
-
-    <nav>
-        <ul>
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="habitats.php">Nos Habitats</a></li>
-            <li><a href="services.php">Nos Services</a></li>
-            <li><a href="connexion.php">Connexion</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-    </nav>
-    
-
-    <section id="avis">
-        <h2>Donnez votre avis</h2>
-        <form action="process_avis.php" method="POST">
-            <label for="pseudo">Pseudo :</label>
-            <input type="text" id="pseudo" name="pseudo" required><br><br>
-            
-            <label for="avis">Votre avis :</label>
-            <textarea id="avis" name="avis" rows="4" required></textarea><br><br>
-            
-            <input type="submit" value="Envoyer">
-        </form>
-    </section>
-
-    <footer>
-        <p>&copy; 2024 Zoo Arcadia - Tous droits réservés</p>
-    </footer>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Commentaire</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($avis as $a) : ?>
+            <tr>
+                <td><?= htmlspecialchars($a['pseudo']); ?></td>
+                <td><?= htmlspecialchars($a['commentaire']); ?></td>
+                <td>
+                    <a href="valider_avis.php?id=<?= $a['avis_id']; ?>">Valider</a>
+                    <a href="rejeter_avis.php?id=<?= $a['avis_id']; ?>">Rejeter</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
 </html>

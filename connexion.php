@@ -23,20 +23,17 @@
         </ul>
     </nav>
     
-
     <section id="connexion">
         <h2>Identifiez-vous</h2>
         <form action="process_connexion.php" method="POST">
-    <label for="email">Adresse e-mail :</label>
-    <input type="email" id="email" name="email" required><br><br>
-    
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required><br><br>
-    
-    <input type="submit" value="Se connecter">
-</form>
-
-        
+            <label for="username">Nom d'utilisateur :</label>
+            <input type="text" id="username" name="username" required><br><br>
+            
+            <label for="password">Mot de passe :</label>
+            <input type="password" id="password" name="mot_de_passe" required><br><br>
+            
+            <input type="submit" value="Se connecter">
+        </form>
     </section>
 
     <footer>

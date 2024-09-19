@@ -7,33 +7,33 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 include 'connexion_bdd.php';
 
-// Vérifier si l'ID du service est passé en paramètre
+// Récupérer les données du service
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $service_id = $_GET['id'];
 
-    // Récupérer les informations du service à modifier
-    $stmt = $pdo->prepare("SELECT * FROM services WHERE id = :id");
-    $stmt->execute(['id' => $id]);
+    $stmt = $pdo->prepare("SELECT * FROM service WHERE service_id = :service_id");
+    $stmt->execute(['service_id' => $service_id]);
     $service = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$service) {
-        echo "Service non trouvé.";
-        exit();
-    }
 }
 
-// Si le formulaire est soumis, on met à jour les informations du service
+// Mise à jour du service
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = $_POST['nom'];
     $description = $_POST['description'];
 
-    // Mettre à jour le service dans la base de données
-    $stmt = $pdo->prepare("UPDATE services SET nom = :nom, description = :description WHERE id = :id");
-    $stmt->execute(['nom' => $nom, 'description' => $description, 'id' => $id]);
+    if (!empty($nom) && !empty($description)) {
+        $stmt = $pdo->prepare("UPDATE service SET nom = :nom, description = :description WHERE service_id = :service_id");
+        $stmt->execute([
+            'nom' => $nom,
+            'description' => $description,
+            'service_id' => $service_id
+        ]);
 
-    // Redirection après modification
-    header('Location: admin.php');
-    exit();
+        header('Location: admin.php'); // Redirection après modification
+        exit();
+    } else {
+        echo "Veuillez remplir tous les champs.";
+    }
 }
 ?>
 
@@ -42,12 +42,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier un Service</title>
+    <title>Modifier Service</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Modifier le Service</h1>
+    <h1>Modifier Service</h1>
 
-    <form action="modifier_service.php?id=<?= $service['id']; ?>" method="POST">
+    <form action="modifier_service.php?id=<?= $service_id ?>" method="POST">
         <label for="nom">Nom du service :</label>
         <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($service['nom']); ?>" required><br><br>
+
+        <label for="description">Description :</label>
+        <textarea id="description" name="description" required><?= htmlspecialchars($service['description']); ?></textarea><br><br>
+
+        <button type="submit">Modifier</button>
+    </form>
+</body>
+</html>

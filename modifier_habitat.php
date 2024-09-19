@@ -7,33 +7,33 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 include 'connexion_bdd.php';
 
-// Vérifier si l'ID de l'habitat est passé en paramètre
+// Récupérer les données de l'habitat
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $habitat_id = $_GET['id'];
 
-    // Récupérer les informations de l'habitat à modifier
-    $stmt = $pdo->prepare("SELECT * FROM habitats WHERE id = :id");
-    $stmt->execute(['id' => $id]);
+    $stmt = $pdo->prepare("SELECT * FROM habitat WHERE habitat_id = :habitat_id");
+    $stmt->execute(['habitat_id' => $habitat_id]);
     $habitat = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$habitat) {
-        echo "Habitat non trouvé.";
-        exit();
-    }
 }
 
-// Si le formulaire est soumis, on met à jour les informations de l'habitat
+// Mise à jour de l'habitat
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = $_POST['nom'];
     $description = $_POST['description'];
 
-    // Mettre à jour l'habitat dans la base de données
-    $stmt = $pdo->prepare("UPDATE habitats SET nom = :nom, description = :description WHERE id = :id");
-    $stmt->execute(['nom' => $nom, 'description' => $description, 'id' => $id]);
+    if (!empty($nom) && !empty($description)) {
+        $stmt = $pdo->prepare("UPDATE habitat SET nom = :nom, description = :description WHERE habitat_id = :habitat_id");
+        $stmt->execute([
+            'nom' => $nom,
+            'description' => $description,
+            'habitat_id' => $habitat_id
+        ]);
 
-    // Redirection après modification
-    header('Location: admin.php');
-    exit();
+        header('Location: admin.php'); // Redirection après modification
+        exit();
+    } else {
+        echo "Veuillez remplir tous les champs.";
+    }
 }
 ?>
 
@@ -42,20 +42,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier un Habitat</title>
+    <title>Modifier Habitat</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Modifier l'Habitat</h1>
+    <h1>Modifier Habitat</h1>
 
-    <form action="modifier_habitat.php?id=<?= $habitat['id']; ?>" method="POST">
+    <form action="modifier_habitat.php?id=<?= $habitat_id ?>" method="POST">
         <label for="nom">Nom de l'habitat :</label>
         <input type="text" id="nom" name="nom" value="<?= htmlspecialchars($habitat['nom']); ?>" required><br><br>
-        
-        <label for="description">Description de l'habitat :</label>
+
+        <label for="description">Description :</label>
         <textarea id="description" name="description" required><?= htmlspecialchars($habitat['description']); ?></textarea><br><br>
-        
-        <input type="submit" value="Modifier l'habitat">
+
+        <button type="submit">Modifier</button>
     </form>
 </body>
 </html>

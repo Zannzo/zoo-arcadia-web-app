@@ -7,16 +7,16 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 
 include 'connexion_bdd.php';
 
-// Vérifier si l'ID du service est passé en paramètre
 if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+    $service_id = $_GET['id'];
 
-    // Supprimer le service de la base de données
-    $stmt = $pdo->prepare("DELETE FROM services WHERE id = :id");
-    $stmt->execute(['id' => $id]);
+    // Suppression sécurisée avec une requête préparée
+    $stmt = $pdo->prepare("DELETE FROM service WHERE service_id = :service_id");
+    $stmt->execute(['service_id' => $service_id]);
 
-    // Redirection après suppression
-    header('Location: admin.php');
+    header('Location: admin.php'); // Redirection après suppression
     exit();
+} else {
+    echo "Service non trouvé.";
 }
 ?>

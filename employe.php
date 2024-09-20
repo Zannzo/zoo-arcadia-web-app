@@ -11,6 +11,10 @@ include 'connexion_bdd.php';
 $requeteAnimaux = $pdo->query("SELECT * FROM animal");
 $animaux = $requeteAnimaux->fetchAll(PDO::FETCH_ASSOC);
 
+// Récupérer les avis en attente de validation
+$requeteAvis = $pdo->query("SELECT * FROM avis WHERE valide = 0");
+$avis = $requeteAvis->fetchAll(PDO::FETCH_ASSOC);
+
 // Récupérer les consommations pour un animal donné
 $consommations = [];
 if (isset($_GET['animal_id'])) {
@@ -19,6 +23,26 @@ if (isset($_GET['animal_id'])) {
     $stmt->execute(['animal_id' => $animal_id]);
     $consommations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Valider un avis
+if (isset($_GET['valider_avis_id'])) {
+    $stmt = $pdo->prepare("UPDATE avis SET valide = 1 WHERE avis_id = :avis_id");
+    $stmt->execute(['avis_id' => $_GET['valider_avis_id']]);
+    header('Location: employe.php');
+    exit();
+}
+
+// Rejeter un avis
+if (isset($_GET['rejeter_avis_id'])) {
+    $stmt = $pdo->prepare("DELETE FROM avis WHERE avis_id = :avis_id");
+    $stmt->execute(['avis_id' => $_GET['rejeter_avis_id']]);
+    header('Location: employe.php');
+    exit();
+}
+
+// Récupérer tous les services
+$requeteServices = $pdo->query("SELECT * FROM service");
+$services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +54,9 @@ if (isset($_GET['animal_id'])) {
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
     <h1>Espace Employé</h1>
+    <a href="deconnexion.php">Déconnexion</a> <!-- Lien pour la déconnexion -->
 
     <!-- Formulaire de sélection d'animal -->
     <form method="GET" action="employe.php">
@@ -95,5 +121,53 @@ if (isset($_GET['animal_id'])) {
 
         <button type="submit">Ajouter la consommation</button>
     </form>
+
+    <h2>Validation des avis</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Pseudo</th>
+                <th>Commentaire</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($avis as $avi): ?>
+                <tr>
+                    <td><?= htmlspecialchars($avi['pseudo']); ?></td>
+                    <td><?= htmlspecialchars($avi['commentaire']); ?></td>
+                    <td>
+                        <a href="employe.php?valider_avis_id=<?= $avi['avis_id']; ?>">Valider</a> | 
+                        <a href="employe.php?rejeter_avis_id=<?= $avi['avis_id']; ?>">Rejeter</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
+    <!-- Section de modification des services -->
+    <h2>Modifier les Services</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($services as $service) : ?>
+            <tr>
+                <td><?= htmlspecialchars($service['nom']); ?></td>
+                <td><?= htmlspecialchars($service['description']); ?></td>
+                <td>
+                    <a href="modifier_service.php?id=<?= $service['service_id']; ?>">Modifier</a>
+                    <a href="supprimer_service.php?id=<?= $service['service_id']; ?>">Supprimer</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+
 </body>
 </html>

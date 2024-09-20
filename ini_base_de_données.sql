@@ -159,6 +159,17 @@ ADD CONSTRAINT fk_image_habitat
 FOREIGN KEY (habitat_id) REFERENCES habitat(habitat_id)
 ON DELETE CASCADE ON UPDATE CASCADE; 
 
+--Ajout de la collone valide dans la table avis
+ALTER TABLE avis
+ADD COLUMN valide TINYINT(1) DEFAULT 0;
 
+--Ajout de la collone consultations_animaux dans la table animal
+ALTER TABLE animal
+ADD COLUMN consultations_animaux INT DEFAULT 0;
 
+--Ajout des collones nourriture_proposee, grammage_nourriture, detail_etat dans la table rapport_veterinaire 
+ALTER TABLE rapport_veterinaire
+ADD COLUMN nourriture_proposee VARCHAR(255),
+ADD COLUMN grammage_nourriture INT,
+ADD COLUMN detail_etat TEXT;
 

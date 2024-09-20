@@ -1,15 +1,14 @@
 <?php
 session_start();
 
+// Connexion à la base de données
+include 'connexion_bdd.php';
+
 // Vérifier si l'utilisateur est connecté et s'il est administrateur
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header('Location: connexion.php');
     exit();
 }
-
-
-// Connexion à la base de données
-include 'connexion_bdd.php';
 
 // Récupérer tous les services
 $requeteServices = $pdo->query("SELECT * FROM service");
@@ -18,6 +17,14 @@ $services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
 // Récupérer tous les habitats
 $requeteHabitats = $pdo->query("SELECT * FROM habitat");
 $habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les statistiques de consultation des animaux
+$stmt = $pdo->query("
+    SELECT prenom, consultations_animaux 
+    FROM animal
+    ORDER BY consultations_animaux DESC
+");
+$consultations = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -29,6 +36,21 @@ $habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<h2>Créer un compte employé ou vétérinaire</h2>
+<form action="creer_utilisateur.php" method="POST">
+    <label for="username">Email (Username) :</label>
+    <input type="email" id="username" name="username" required><br><br>
+
+    <label for="role">Rôle :</label>
+    <select id="role" name="role" required>
+        <option value="employe">Employé</option>
+        <option value="veterinaire">Vétérinaire</option>
+    </select><br><br>
+
+    <button type="submit">Créer l'utilisateur</button>
+</form>
+
     <h1>Gestion des Services et Habitats</h1>
 
     <!-- Gestion des Services -->
@@ -97,4 +119,26 @@ $habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
         </tbody>
     </table>
 </body>
-</html>
+
+
+<h2>Statistiques de consultation des animaux</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Animal</th>
+            <th>Consultations</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($consultations as $consultation): ?>
+            <tr>
+                <td><?= htmlspecialchars($consultation['prenom']); ?></td>
+                <td><?= htmlspecialchars($consultation['consultations_animaux']); ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<h2>Espace Administrateur</h2>
+<a href="deconnexion.php">Déconnexion</a>
+

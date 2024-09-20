@@ -13,6 +13,11 @@ $habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
 // Récupérer les services
 $requeteServices = $pdo->query("SELECT * FROM service");
 $services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer les avis validés
+$requeteAvisValides = $pdo->query("SELECT pseudo, commentaire FROM avis WHERE valide = 1");
+$avisValides = $requeteAvisValides->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 
@@ -55,15 +60,18 @@ $services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </section>
 
-    <section id="affichage-avis">
-        <h2>Avis des visiteurs</h2>
-        <!-- Affichage dynamique des avis validés depuis la base de données -->
-        <?php foreach ($avis as $a): ?>
+    <section id="avis">
+    <h2>Avis des visiteurs</h2>
+    <?php if (!empty($avisValides)): ?>
+        <?php foreach ($avisValides as $avis): ?>
             <div class="avis">
-                <p><strong><?= htmlspecialchars($a['pseudo']); ?> :</strong> <?= htmlspecialchars($a['commentaire']); ?></p>
+                <p><strong><?= htmlspecialchars($avis['pseudo']); ?> :</strong> <?= htmlspecialchars($avis['commentaire']); ?></p>
             </div>
         <?php endforeach; ?>
-    </section>
+    <?php else: ?>
+        <p>Aucun avis disponible pour le moment.</p>
+    <?php endif; ?>
+</section>
 
     <section id="services">
         <h2>Nos Services</h2>

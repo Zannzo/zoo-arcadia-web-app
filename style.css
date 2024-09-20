@@ -253,3 +253,107 @@ footer {
     font-size: 0.9em;
     color: #666;
 }
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+    header {
+        padding: 10px;
+        text-align: center;
+    }
+
+    nav ul {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    nav ul li {
+        margin: 5px 0;
+    }
+
+    section {
+        margin: 20px 0;
+        padding: 10px;
+    }
+
+    /* Réduire la taille des habitats pour mobile */
+    .habitat {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .habitat img {
+        max-width: 100%;
+    }
+
+    #connexion, #contact, #avis {
+        width: 100%;
+        padding: 15px;
+    }
+
+    /* Style du menu pour mobile */
+    nav ul {
+        padding: 0;
+        background-color: #2c3e50;
+    }
+
+    nav ul li {
+        display: block;
+        text-align: center;
+    }
+
+    nav ul li a {
+        padding: 10px;
+        display: block;
+        border-bottom: 1px solid #ccc;
+    }
+
+    /* Ajustement des tableaux pour les petits écrans */
+    table {
+        width: 100%;
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    table thead, table tbody {
+        display: table;
+        width: 100%;
+    }
+
+    /* Ajustement du formulaire */
+    input, textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Gestion images des habitats */
+    footer {
+        margin-top: 20px;
+        font-size: 0.8em;
+    }
+    .habitat-container {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+    
+    .habitat {
+        text-align: center;
+        margin: 20px;
+    }
+    
+    .habitat img {
+        width: 300px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+    
+    @media (max-width: 768px) {
+        .habitat img {
+            width: 100%;
+            height: auto;
+        }
+    }
+    
+}

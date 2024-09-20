@@ -56,7 +56,7 @@ $services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
     <h1>Espace Employé</h1>
-    <a href="deconnexion.php">Déconnexion</a> <!-- Lien pour la déconnexion -->
+    <a href="deconnexion.php">Déconnexion</a> 
 
     <!-- Formulaire de sélection d'animal -->
     <form method="GET" action="employe.php">

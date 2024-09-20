@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO habitat (nom, description) VALUES (:nom, :description)");
         $stmt->execute(['nom' => $nom, 'description' => $description]);
 
-        header('Location: admin.php'); // Redirection après ajout
+        header('Location: admin.php'); 
         exit();
     } else {
         echo "Veuillez remplir tous les champs.";

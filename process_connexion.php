@@ -19,19 +19,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Vérification du mot de passe
     if ($utilisateur && password_verify($mot_de_passe, $utilisateur['password'])) {
         // Démarrer la session pour l'utilisateur
-        $_SESSION['user_id'] = $utilisateur['username'];  // Utilise username comme identifiant
+        $_SESSION['user_id'] = $utilisateur['username'];  
         $_SESSION['username'] = $utilisateur['username'];
-        $_SESSION['role'] = $utilisateur['role_label'];  // Stocke le label du rôle
+        $_SESSION['role'] = $utilisateur['role_label'];  
 
         // Rediriger en fonction du rôle stocké dans la session
         if ($_SESSION['role'] === 'admin') {
-            header('Location: admin.php');  // Redirection pour les admins
+            header('Location: admin.php');  
         } elseif ($_SESSION['role'] === 'employe') {
-            header('Location: employe.php');  // Redirection pour les employés
+            header('Location: employe.php');  
         } elseif ($_SESSION['role'] === 'veterinaire') {
-            header('Location: veterinaire.php');  // Redirection pour les vétérinaires
+            header('Location: veterinaire.php');  
         } else {
-            header('Location: index.php');  // Redirection pour les autres utilisateurs (par défaut)
+            header('Location: index.php'); 
         }
         exit();
     } else {

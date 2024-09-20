@@ -1,90 +1,75 @@
 <?php
-session_start();
 include 'connexion_bdd.php';
 
-// Récupérer les avis validés (invisible = 0 signifie que l'avis est validé)
-$requeteAvis = $pdo->query("SELECT * FROM avis WHERE invisible = 0");
+// Récupérer les avis valides et visibles
+$requeteAvis = $pdo->prepare("SELECT pseudo, commentaire FROM avis WHERE valide = 1 AND invisible = 0");
+$requeteAvis->execute();
 $avis = $requeteAvis->fetchAll(PDO::FETCH_ASSOC);
-
-// Récupérer les habitats
-$requeteHabitats = $pdo->query("SELECT * FROM habitat");
-$habitats = $requeteHabitats->fetchAll(PDO::FETCH_ASSOC);
-
-// Récupérer les services
-$requeteServices = $pdo->query("SELECT * FROM service");
-$services = $requeteServices->fetchAll(PDO::FETCH_ASSOC);
-
-// Récupérer les avis validés
-$requeteAvisValides = $pdo->query("SELECT pseudo, commentaire FROM avis WHERE valide = 1");
-$avisValides = $requeteAvisValides->fetchAll(PDO::FETCH_ASSOC);
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoo Arcadia</title>
+    <title>Zoo Arcadia - Accueil</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
         <h1>Bienvenue au Zoo Arcadia</h1>
-        <p>Découvrez nos habitats, nos animaux et notre engagement écologique.</p>
+        <nav>
+            <ul>
+                <li><a href="index.php">Accueil</a></li>
+                <li><a href="habitats.php">Nos Habitats</a></li>
+                <li><a href="services.php">Nos Services</a></li>
+                <li><a href="connexion.php">Connexion</a></li>
+                <li><a href="contact.php">Contactez-nous</a></li>
+            </ul>
+        </nav>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="index.php">Accueil</a></li>
-            <li><a href="habitats.php">Nos Habitats</a></li>
-            <li><a href="services.php">Nos Services</a></li>
-            <li><a href="connexion.php">Connexion</a></li>
-            <li><a href="contact.php">Contact</a></li>
-        </ul>
-    </nav>
+    <section id="presentation">
+        <h2>Présentation du Zoo</h2>
+        <p>Le Zoo Arcadia vous propose une découverte unique de la faune sauvage avec ses différents habitats naturels recréés pour le bien-être des animaux. Venez découvrir nos animaux, nos services, et laissez-vous transporter dans notre monde.</p>
+    </section>
 
     <section id="habitats">
-        <h2>Nos Habitats</h2>
-        <div class="habitat">
-            <h3>Savane</h3>
-            <img src="https://via.placeholder.com/150" alt="Savane">
-            <p>La savane accueille les éléphants, lions et bien plus encore.</p>
-        </div>
-        <div class="habitat">
-            <h3>Jungle</h3>
-            <img src="https://via.placeholder.com/150" alt="Jungle">
-            <p>Explorez la jungle et découvrez nos singes, perroquets et autres espèces exotiques.</p>
+        <h2>Découvrez nos Habitats</h2>
+        <div class="habitat-container">
+            <div class="habitat">
+                <img src="images/savane.png" alt="Savane" />
+                <h3>Savane</h3>
+                <p>Découvrez les animaux de la savane africaine dans leur habitat naturel reconstitué.</p>
+            </div>
+            <div class="habitat">
+                <img src="images/jungle.png" alt="Jungle" />
+                <h3>Jungle</h3>
+                <p>Venez explorer la jungle tropicale avec ses nombreuses espèces exotiques.</p>
+            </div>
         </div>
     </section>
 
+    <!-- Section des avis -->
     <section id="avis">
-    <h2>Avis des visiteurs</h2>
-    <?php if (!empty($avisValides)): ?>
-        <?php foreach ($avisValides as $avis): ?>
-            <div class="avis">
-                <p><strong><?= htmlspecialchars($avis['pseudo']); ?> :</strong> <?= htmlspecialchars($avis['commentaire']); ?></p>
+        <h2>Avis des visiteurs</h2>
+        <p>Découvrez ce que nos visiteurs disent de leur expérience au Zoo Arcadia.</p>
+        <?php if (!empty($avis)): ?>
+            <div class="avis-container">
+                <?php foreach ($avis as $avi): ?>
+                    <div class="avis">
+                        <h4><?= htmlspecialchars($avi['pseudo']); ?></h4>
+                        <p><?= htmlspecialchars($avi['commentaire']); ?></p>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Aucun avis disponible pour le moment.</p>
-    <?php endif; ?>
-</section>
-
-    <section id="services">
-        <h2>Nos Services</h2>
-        <ul>
-            <li>Restauration</li>
-            <li>Visite guidée des habitats</li>
-            <li>Petit train du zoo</li>
-        </ul>
+        <?php else: ?>
+            <p>Aucun avis disponible pour le moment.</p>
+        <?php endif; ?>
     </section>
 
     <footer>
         <p>&copy; 2024 Zoo Arcadia - Tous droits réservés</p>
     </footer>
-
 </body>
 </html>

@@ -126,7 +126,7 @@ if (isset($_GET['animal_id'])) {
                 <ul>
                     <?php foreach ($rapports_veterinaire as $rapport): ?>
                         <li>
-                            <p><strong>Date de passage :</strong> <?= htmlspecialchars($rapport['date_passage']); ?></p>
+                            <p><strong>Date de passage :</strong> <?= htmlspecialchars($rapport['date']); ?></p>
                             <p><strong>État :</strong> <?= htmlspecialchars($rapport['detail']); ?></p>
                             <p><strong>Nourriture proposée :</strong> <?= htmlspecialchars($rapport['nourriture_proposee']); ?></p>
                             <p><strong>Grammage :</strong> <?= htmlspecialchars($rapport['grammage_nourriture']); ?> g</p>

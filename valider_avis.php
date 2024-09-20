@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("UPDATE avis SET invisible = 0 WHERE avis_id = :avis_id");
     $stmt->execute(['avis_id' => $avis_id]);
 
-    header('Location: avis.php'); // Redirection après validation
+    header('Location: avis.php'); 
     exit();
 } else {
     echo "Avis non trouvé.";

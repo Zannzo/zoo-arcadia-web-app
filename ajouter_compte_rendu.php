@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nourriture = $_POST['nourriture_proposee'];
     $grammage = $_POST['grammage_nourriture'];
     $date_passage = $_POST['date_passage'];
-    $detail_etat = $_POST['detail_etat'] ?? ''; // Optionnel
+    $detail_etat = $_POST['detail_etat'] ?? ''; 
 
     if (!empty($animal_id) && !empty($etat) && !empty($nourriture) && !empty($grammage) && !empty($date_passage)) {
         $stmt = $pdo->prepare("INSERT INTO rapport_veterinaire (animal_id, date, detail) 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'etat' => $etat
         ]);
 
-        header('Location: veterinaire.php'); // Redirection après ajout
+        header('Location: veterinaire.php'); 
         exit();
     } else {
         echo "Tous les champs sont requis.";

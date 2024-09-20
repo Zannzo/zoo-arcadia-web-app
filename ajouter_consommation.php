@@ -15,9 +15,9 @@ error_reporting(E_ALL);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $animal_id = $_POST['animal_id'];
     $nourriture = $_POST['nourriture'];
-    $quantite = $_POST['quantite'];  // Remplacer grammage par quantite
+    $quantite = $_POST['quantite'];  
     $date_consommation = $_POST['date_consommation'];
-    $heure_consommation = $_POST['heure_consommation'];  // Ajouter l'heure de consommation
+    $heure_consommation = $_POST['heure_consommation'];  
 
     // Vérifier que toutes les données sont bien transmises
     if (empty($animal_id) || empty($nourriture) || empty($quantite) || empty($date_consommation) || empty($heure_consommation)) {
@@ -33,9 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([
             'animal_id' => $animal_id,
             'nourriture' => $nourriture,
-            'quantite' => $quantite,  // Utiliser quantite au lieu de grammage
+            'quantite' => $quantite,  
             'date_consommation' => $date_consommation,
-            'heure_consommation' => $heure_consommation  // Insertion de l'heure de consommation
+            'heure_consommation' => $heure_consommation  
         ]);
         // Redirection après ajout réussi
         header('Location: employe.php?animal_id=' . $animal_id);

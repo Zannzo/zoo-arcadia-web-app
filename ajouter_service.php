@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO service (nom, description) VALUES (:nom, :description)");
         $stmt->execute(['nom' => $nom, 'description' => $description]);
 
-        header('Location: admin.php'); // Rediriger vers l'admin après ajout
+        header('Location: admin.php'); 
         exit();
     } else {
         echo "Veuillez remplir tous les champs.";

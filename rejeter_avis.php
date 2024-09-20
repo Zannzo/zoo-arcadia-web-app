@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM avis WHERE avis_id = :avis_id");
     $stmt->execute(['avis_id' => $avis_id]);
 
-    header('Location: avis.php'); // Redirection après suppression
+    header('Location: avis.php'); 
     exit();
 } else {
     echo "Avis non trouvé.";

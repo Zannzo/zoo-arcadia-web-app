@@ -14,7 +14,7 @@ if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM habitat WHERE habitat_id = :habitat_id");
     $stmt->execute(['habitat_id' => $habitat_id]);
 
-    header('Location: admin.php'); // Redirection après suppression
+    header('Location: admin.php'); 
     exit();
 } else {
     echo "Habitat non trouvé.";

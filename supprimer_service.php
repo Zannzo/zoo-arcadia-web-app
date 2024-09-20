@@ -14,8 +14,7 @@ if (isset($_GET['id'])) {
     $stmt = $pdo->prepare("DELETE FROM service WHERE service_id = :service_id");
     $stmt->execute(['service_id' => $service_id]);
 
-    header('Location: admin.php'); // Redirection après suppression
-    exit();
+    header('Location: admin.php'); 
 } else {
     echo "Service non trouvé.";
 }
